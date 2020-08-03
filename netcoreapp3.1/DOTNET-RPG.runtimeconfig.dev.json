@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "/Users/f.asteur/.dotnet/store/|arch|/|tfm|",
+      "/Users/f.asteur/.nuget/packages"
+    ]
+  }
+}
