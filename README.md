@@ -1,2 +1,2 @@
-# dotnet
+# DOTNET-RPG
 Training dotnet
