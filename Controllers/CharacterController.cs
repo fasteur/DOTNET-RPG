@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DOTNET_RPG.Dtos.Character;
 using DOTNET_RPG.Services.CharacterService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DOTNET_RPG.Models
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CharacterController : ControllerBase
@@ -16,25 +18,26 @@ namespace DOTNET_RPG.Models
         {
             _characterService = characterService;
         }
-        // GET ALL
+
+        [AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<IActionResult> Get()
         {
             return Ok(await _characterService.GetAllCharacters());
         }
-        // GET SINGLE
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
         {
             return Ok(await _characterService.GetCharacterById(id));
         }
-        // ADD
+
         [HttpPost]
         public async Task<IActionResult> AddCharacter(AddCharacterDto newCharacter)
         {
             return Ok(await _characterService.AddCharacter(newCharacter));
         }
-        // UPDATE
+
         [HttpPut]
         public async Task<IActionResult> UpdateCharacter(UpdateCharacterDto updatedCharacter)
         {
@@ -48,7 +51,7 @@ namespace DOTNET_RPG.Models
                 return Ok(response);
             }
         }
-        // DELETE
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCharacter(int id)
         {
