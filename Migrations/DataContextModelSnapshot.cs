@@ -75,11 +75,44 @@ namespace DOTNET_RPG.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("DOTNET_RPG.Models.Weapon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Damage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId")
+                        .IsUnique();
+
+                    b.ToTable("Weapons");
+                });
+
             modelBuilder.Entity("DOTNET_RPG.Models.Character", b =>
                 {
                     b.HasOne("DOTNET_RPG.Models.User", "User")
                         .WithMany("Characters")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("DOTNET_RPG.Models.Weapon", b =>
+                {
+                    b.HasOne("DOTNET_RPG.Models.Character", "Character")
+                        .WithOne("Weapon")
+                        .HasForeignKey("DOTNET_RPG.Models.Weapon", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
