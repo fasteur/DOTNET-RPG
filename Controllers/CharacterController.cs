@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using DOTNET_RPG.Dtos.Character;
 using DOTNET_RPG.Services.CharacterService;
@@ -19,7 +22,6 @@ namespace DOTNET_RPG.Models
             _characterService = characterService;
         }
 
-        [AllowAnonymous]
         [HttpGet("GetAll")]
         public async Task<IActionResult> Get()
         {
