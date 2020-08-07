@@ -1,3 +1,5 @@
+using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using DOTNET_RPG.Data;
@@ -5,6 +7,7 @@ using DOTNET_RPG.Dtos.Character;
 using DOTNET_RPG.Dtos.CharacterSkill;
 using DOTNET_RPG.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace DOTNET_RPG.Services.CharacterSkillService
 {
@@ -20,9 +23,44 @@ namespace DOTNET_RPG.Services.CharacterSkillService
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
-        public Task<ServiceResponse<GetCharacterDto>> AddCharacterSkill(AddCharacterSkillDto newCharachterSkill)
+        public async Task<ServiceResponse<GetCharacterDto>> AddCharacterSkill(AddCharacterSkillDto newCharachterSkill)
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
+            try
+            {
+                Character character = await _context.Characters
+                    .Include(c => c.Weapon)
+                    .Include(c => c.CharacterSkills)
+                    .ThenInclude(c => c.Skill)
+                    .FirstOrDefaultAsync(c => c.Id == newCharachterSkill.CharacterId && c.User.Id == int.Parse(_httpContextAccessor.HttpContext.User
+                    .FindFirstValue(ClaimTypes.NameIdentifier)));
+
+                if (character == null)
+                {
+                    response.Success = false; 
+                    response.Message = "Character not found.";
+                    return response;
+                }
+                Skill skill = await _context.Skills
+                    .FirstOrDefaultAsync(s => s.Id == newCharachterSkill.SkillId);
+                    
+                CharacterSkill characterSkill = new CharacterSkill
+                {
+                    Character = character,
+                    Skill = skill
+                };
+                
+                await _context.CharacterSkills.AddAsync(characterSkill);
+                await _context.SaveChangesAsync();
+                response.Data = _mapper.Map<GetCharacterDto>(character);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false; 
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
 }
+
