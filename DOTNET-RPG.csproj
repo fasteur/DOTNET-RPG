@@ -20,5 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Dtos\User\" />
+    <Folder Include="Services\WeaponService\" />
+    <Folder Include="Dtos\Weapon\" />
   </ItemGroup>
 </Project>
