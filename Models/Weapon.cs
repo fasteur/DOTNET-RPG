@@ -1,5 +1,4 @@
-﻿using System;
-namespace DOTNET_RPG.Models
+﻿namespace DOTNET_RPG.Models
 {
     public class Weapon
     {
@@ -9,8 +8,8 @@ namespace DOTNET_RPG.Models
 
         public int Damage { get; set; }
 
-        public int CharacterId { get; set; }
-
         public Character Character { get; set; }
+        
+        public int CharacterId { get; set; }
     }
 }
